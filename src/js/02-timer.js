@@ -1,40 +1,63 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-const ent = document.querySelector("#datetime-picker");
-const bton = document.querySelector(".start");
 
-const options = {
+const dateInput = document.querySelector("#datetime-picker");
+const dia = document.querySelector('[data-days =""]');
+const hora = document.querySelector('[data-hours =""]');
+const minutos = document.querySelector('[data-minutes =""]');
+const segundos = document.querySelector('[data-seconds =""]');
+const boton = document.querySelector('[data-start =""]');
+const aviso = document.querySelector(".timer");
+
+flatpickr(dateInput, {
     enableTime: true,
     time_24hr: true,
     defaultDate: new Date(),
     minuteIncrement: 1,
-    onClose(selectedDates) {
-      console.log(selectedDates[0]);
-    },
-  };
-  flatpickr(ent, options);
-  bton.addEventListener("click" , flatpickr(ent, options));
-  function convertMs(ent) {
-    // Number of milliseconds per unit of time
-    const second = 1000;
-    const minute = second * 60;
-    const hour = minute * 60;
-    const day = hour * 24;
-  
-    // Remaining days
-    const days = Math.floor(ent / day);
-    // Remaining hours
-    const hours = Math.floor((ent % day) / hour);
-    // Remaining minutes
-    const minutes = Math.floor(((ent % day) % hour) / minute);
-    // Remaining seconds
-    const seconds = Math.floor((((ent % day) % hour) % minute) / second);
-  
-    return { days, hours, minutes, seconds };
+  onClose(selectedDates){
+    if (selectedDates[0] < new Date()) {
+      alert("No se puede seleccionar una fecha anterior a la fecha actual");
+    }
   }
-  
-  console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-  console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-  console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
-  
-  
+});
+
+//let targetDate;
+
+//dateInput.addEventListener("change" , (e) => {
+//  targetDate = new Date (e.target.value).getTime();
+
+//});
+
+//const targetDate = new Date (dateInput.value);
+const targetDate = new Date ("2023-02-04");
+
+function Ejec() {
+const displayCountdown = setInterval( function() {
+  const currentTime = new Date();
+  const difference = targetDate  - currentTime; 
+
+  // Calculate the remaining time
+  const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+  // Mostrar el contador en el elemento
+  dia.textContent = days;
+  hora.textContent = hours;
+  minutos.textContent = minutes;
+  segundos.textContent = seconds;
+
+  if (difference < 0) {
+    clearInterval(displayCountdown);
+    aviso.innerHTML = `<h2>"TIME EXPIRED"</h2>`;
+  }  
+
+},1000 );
+}
+
+boton.addEventListener("click" , () => {
+   Ejec();
+});
+
+
