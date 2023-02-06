@@ -1,5 +1,7 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import Notiflix from 'notiflix';
+
 
 const dateInput = document.querySelector("#datetime-picker");
 const dia = document.querySelector('[data-days =""]');
@@ -16,20 +18,20 @@ flatpickr(dateInput, {
     minuteIncrement: 1,
   onClose(selectedDates){
     if (selectedDates[0] < new Date()) {
-      alert("No se puede seleccionar una fecha anterior a la fecha actual");
+      Notiflix.Notify.failure('fecha no valida');
     }
   }
 });
 
-//let targetDate;
+let targetDate;
 
-//dateInput.addEventListener("change" , (e) => {
-//  targetDate = new Date (e.target.value).getTime();
+dateInput.addEventListener("change" , (e) => {
+  targetDate = new Date (e.target.value).getTime();
 
-//});
+});
 
 //const targetDate = new Date (dateInput.value);
-const targetDate = new Date ("2023-02-04");
+//const targetDate = new Date ("2023-02-04");
 
 function Ejec() {
 const displayCountdown = setInterval( function() {
@@ -42,7 +44,7 @@ const displayCountdown = setInterval( function() {
   const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-  // Mostrar el contador en el elemento
+ 
   dia.textContent = days;
   hora.textContent = hours;
   minutos.textContent = minutes;
@@ -58,6 +60,7 @@ const displayCountdown = setInterval( function() {
 
 boton.addEventListener("click" , () => {
    Ejec();
+   Notiflix.Notify.info('inicio contador');
 });
 
 
