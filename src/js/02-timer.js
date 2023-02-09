@@ -11,6 +11,8 @@ const segundos = document.querySelector('[data-seconds =""]');
 const boton = document.querySelector('[data-start =""]');
 const aviso = document.querySelector(".timer");
 
+boton.disabled = true;
+
 flatpickr(dateInput, {
     enableTime: true,
     time_24hr: true,
@@ -19,6 +21,10 @@ flatpickr(dateInput, {
   onClose(selectedDates){
     if (selectedDates[0] < new Date()) {
       Notiflix.Notify.failure('fecha no valida');
+      boton.disabled = true;
+    }
+    else{
+      boton.disabled = false;
     }
   }
 });
@@ -44,7 +50,7 @@ const displayCountdown = setInterval( function() {
   const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
- 
+  // Mostrar el contador en el elemento
   dia.textContent = days;
   hora.textContent = hours;
   minutos.textContent = minutes;
